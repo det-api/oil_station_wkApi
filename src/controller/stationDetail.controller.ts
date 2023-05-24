@@ -6,7 +6,6 @@ import {
   updateStationDetail,
   deleteStationDetail,
 } from "../service/stationDetail.service";
-import { getDailyPrice } from "../service/dailyPrice.service";
 
 export const getStationDetailHandler = async (
   req: Request,
@@ -15,14 +14,6 @@ export const getStationDetailHandler = async (
 ) => {
   try {
     let result = await getStationDetail(req.query);
-
-    await Promise.all(
-      result.map(async (ea) => {
-        let prices = await getDailyPrice({ stationId: ea["_id"] });
-        ea["prices"] = prices;
-      })
-    );
-
     fMsg(res, "StationDetail are here", result);
   } catch (e) {
     next(new Error(e));

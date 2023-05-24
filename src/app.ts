@@ -5,18 +5,17 @@ import cors from "cors";
 import fileUpload from "express-fileupload";
 import userRoute from "./router/user.routes";
 import fuelInRoute from "./router/fuelIn.routes";
-import nozzleRoute from "./router/nozzle.routes";
-import testRoute from "./router/test.routes";
+
 import mqtt from "mqtt";
 import roleRoute from "./router/role.routes";
 import permitRoute from "./router/permit.routes";
 import stationDetailRoute from "./router/stationDetail.routes";
-import dailyPriceRoute from "./router/dailyPrice.routes";
 import dailyReportRoute from "./router/dailyReport.routes";
 import detailSaleRoute from "./router/detailSale.routes";
 import { backup } from "./backup/backup";
 import {migrate} from "./migration/migrator"
 import { daily } from "./migration/dailyReport.migrate";
+import fuelBalanceRoute from "./router/fuelBalance.routes";
 
 const app = express();
 app.use(express.json());
@@ -48,14 +47,11 @@ app.use("/api/role", roleRoute);
 app.use("/api/permit", permitRoute);
 
 app.use("/api/fuelIn", fuelInRoute);
-app.use("/api/nozzle", nozzleRoute);
 
 app.use("/api/station-detail", stationDetailRoute);
-app.use("/api/daily-price", dailyPriceRoute);
 app.use("/api/daily-report", dailyReportRoute);
 app.use("/api/detail-sale", detailSaleRoute);
-
-app.use("/api/test", testRoute);
+app.use("/api/fuel-balance" , fuelBalanceRoute)
 
 //Error Routes
 

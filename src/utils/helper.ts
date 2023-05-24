@@ -16,6 +16,13 @@ export const createToken = (payload : {}) => jwt.sign(payload , secretKey , {exp
 export const checkToken = (payload : string) : any => jwt.verify( payload , secretKey )
 
 
+//get prev date
+export let previous = (date = new Date())=>{
+  let previousDate = new Date();
+  previousDate.setDate(date.getDate() - 1);
+  return previousDate;
+}
+
 //for response 
 const fMsg = (res : Response , msg : string ='all success' , result : any =[] ) =>{
     res.status(200).json({con:true , msg , result})
