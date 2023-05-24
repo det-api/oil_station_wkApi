@@ -30,17 +30,7 @@ export const updateFuelBalance = async (
   body: UpdateQuery<fuelBalanceDocument>
 ) => {
   try {
-    // await fuelBalanceModel.updateMany(query, body);
-    let result = await fuelBalanceModel.find(query).lean();
-    if (result.length == 0) {
-      throw new Error("not work");
-    }
-    let cashLiter = result[0].cash + body.liter;
-    let obj = {
-      cash: cashLiter,
-      balance: result[0].opening - cashLiter,
-    };
-    await fuelBalanceModel.updateMany(query, obj);
+    await fuelBalanceModel.updateMany(query, body);
     return await fuelBalanceModel.find(query).lean();
   } catch (e) {
     throw new Error(e);
@@ -65,7 +55,9 @@ export const deleteFuelBalance = async (
 export const calcFuelBalance = async (query, body, payload) => {
   try {
     // await fuelBalanceModel.updateMany(query, body);
-    let result = await fuelBalanceModel.find(query).lean();
+    // console.log(query);
+    let result = await fuelBalanceModel.find(query);
+    // console.log(result);
     if (result.length == 0) {
       throw new Error("not work");
     }

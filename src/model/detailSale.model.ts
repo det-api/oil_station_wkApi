@@ -35,8 +35,7 @@ const detailSaleSchema = new Schema({
 });
 
 detailSaleSchema.pre("save", function (next) {
-  console.log("gg");
-  console.log(this.fuelType, this.salePrice);
+
   if (this.fuelType == "001-Octane Ron(92)" && this.salePrice < 5000) {
     // console.log("hh");
     this.vehicleType = "Cycle";

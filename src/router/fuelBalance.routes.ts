@@ -9,6 +9,8 @@ import {
   import { roleValidator } from "../middleware/roleValidator";
   import { validateAll, validateToken } from "../middleware/validator";
   const fuelBalanceRoute = require("express").Router();
+
+  fuelBalanceRoute.get("/all" , getAllFuelBalanceHandler);
   
   fuelBalanceRoute.get(
     "/",

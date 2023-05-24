@@ -1,9 +1,14 @@
 import { FilterQuery, UpdateQuery } from "mongoose";
 import detailSaleModel, { detailSaleDocument } from "../model/detailSale.model";
+import { calcFuelBalance } from "./fuelBalance.service";
 
 export const getDetailSale = async (query: FilterQuery<detailSaleDocument>) => {
   try {
-    return await detailSaleModel.find(query).lean().populate("stationDetailId").select("-__v");
+    return await detailSaleModel
+      .find(query)
+      .lean()
+      .populate("stationDetailId")
+      .select("-__v");
   } catch (e) {
     throw new Error(e);
   }
@@ -11,7 +16,14 @@ export const getDetailSale = async (query: FilterQuery<detailSaleDocument>) => {
 
 export const addDetailSale = async (body: detailSaleDocument) => {
   try {
-    return await new detailSaleModel(body).save();
+    let result = await new detailSaleModel(body).save();
+    // console.log(result);
+    await calcFuelBalance(
+      { fuelType: result.fuelType },
+      { liter: result.saleLiter },
+      result.nozzleNo
+    );
+    return result;
   } catch (e) {
     throw new Error(e);
   }
@@ -51,15 +63,10 @@ export const getDetailSaleByFuelType = async (
     dailyReportDate: dateOfDay,
     fuelType: fuelType,
   });
- // console.log(fuelType)
-// if(fuelType == "001-Octane Ron(92)"){
-  //  console.log(fuel)
-  //}
- let fuelLength = 0
- if(fuel.length != 0){
-   
-   fuelLength =  fuel.length+1
 
+  let fuelLength = 0;
+  if (fuel.length != 0) {
+    fuelLength = fuel.length + 1;
   }
   let fuelLiter = fuel
     .map((ea) => ea["saleLiter"])
@@ -69,4 +76,3 @@ export const getDetailSaleByFuelType = async (
     .reduce((pv: number, cv: number): number => pv + cv, 0);
   return { count: fuelLength, liter: fuelLiter, price: fuelAmount };
 };
-
